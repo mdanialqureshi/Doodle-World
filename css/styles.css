@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+body {
+    background-color: #292C34;
+}
+.game {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 40px auto 10px auto;
+    width: 300px;
+}
+
+.game > canvas {
+    border: 1px solid white;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 300px;
+    margin: auto;
+}
+
+
+.paint-menu {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+    border: 3px solid black;
+    border-radius: 10px;
+    top: 2px;
+    left: 254px;
+}
+
+.paint-menu .hamburger {
+    width: 35px;
+    height: 6px;
+    background: lightgreen;
+    border-radius: 5px;
+    transition: all .5s ease-in-out;
+}
+
+.paint-menu .hamburger::before,
+.paint-menu .hamburger::after {
+    content: '';
+    position: absolute;
+    width: 35px;
+    height: 6px;
+    background: transparent;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(255,101,47,.2);
+    transition: all .5s ease-in-out;
+}
+
+.paint-menu .hamburger::before {
+    transform: translateY(-10px);
+    background: lightcoral;
+}
+
+.paint-menu .hamburger::after {
+    transform: translateY(10px);
+    background: lightblue;
+
+}
+
+.paint-menu.open .hamburger {
+    transform: translateX(-50px);
+    background: transparent;
+    box-shadow: none;
+}
+
+.paint-menu.open .hamburger::before {
+    transform: rotate(45deg) translate(35px,-35px);
+}
+
+.paint-menu.open .hamburger::after {
+    transform: rotate(-45deg) translate(35px,35px);
+}
+
+.paint-menu-options {
+    display: none;
+}
+
+.paint-menu-options-open {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+    position: absolute;
+    top: -25px;
+    left: -5px;
+    z-index: 1;
+}
+
+.paint-menu-options li {
+    margin: 5px;
+    list-style: none;
+}
+
+.paint-menu-options li img {
+    margin-top: 5px;
+    width: 100%;
+}
+
