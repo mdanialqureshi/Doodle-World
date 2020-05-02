@@ -11,6 +11,9 @@
     box-sizing: border-box;
 }
 
+header {
+    width: 404px;
+}
 
 .game {
     position: relative;
@@ -30,7 +33,7 @@
 }
 
 .game div:hover {
-    opacity: 0.5;
+    opacity: 0.8;
     transition: opacity 0.5s ease-in-out;
     cursor: pointer;
 }

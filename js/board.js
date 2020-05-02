@@ -58,7 +58,7 @@ function setUpTileSketches() {
                     tile.appendChild(img);
                     //remove the ref to the game
                     // this makes sure that the board cannot be edited when there is already a drawing in place
-                    document.querySelector(`#ref-tile-${i}`).setAttribute('href','#')
+                    document.querySelector(`#ref-tile-${i}`).setAttribute('href',`/images/tile-${i}.png`)
                 } else {
                     // console.log("no" + i)
                 }
