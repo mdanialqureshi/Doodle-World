@@ -148,27 +148,36 @@ function clear() {
 
 function save() {
 
-    if (window.navigator.msSaveBlob) { //internet explorer only
-        window.navigator.msSaveBlob(canvas.msToBlob(), "drawing.png")
+    if (confirm('Are you sure you want to save your drawing? You only get to save once, and you will no longer be able to edit your masterpiece.')) {
+        // Save it!
+        let currentTile = sessionStorage.getItem('tilenum')
+        axios({
+            method: 'get',
+            url: `/images/exist/tile-${currentTile}.png`,
+        })
+            .then(response => {
+                // if there is not an entry in the db for this tile then it can be saved to the db.
+                if (!response.data.exist) {
+                    canvas.toBlob(function (blob) {
+                        const formData = new FormData();
+                        formData.append('userDrawing', blob, `tile-${currentTile}.png`);
+                        // Post via axios or other transport method
+                        axios.post('/done-drawing/' + currentTile, formData)
+                            .then((res) => console.log("Success! Image has been saved"))
+                            .catch((err) => console.log('err' + err))
+                    });
+                    //user has saved so clear the canvas for safe measure and exit to the homepage
+                    // clear();
+                }
+                // exit regardless of if there is alrdy an entry in the db or not
+                // wait a bit before exiting so pic has tome to get to db and render on index.html page
+                setTimeout(() => {
+                    exit()
+                }, 800)
+            })
+            .catch(err => "Error" + err)
     } else {
-        console.log(sessionStorage.getItem('tilenum'))
-        // const a = document.createElement("a");
-        // document.body.appendChild(a);
-        // a.href = canvas.toDataURL();
-        // a.download = "drawing.png";
-        // let filename = prompt("What would you like to save the file as?")
-        // a.download = filename + ".png"
-        // a.click()
-        // document.body.removeChild(a); //remove the child once we are done
-        canvas.toBlob(function (blob) {
-            let currentTile = sessionStorage.getItem('tilenum')
-            const formData = new FormData();
-            formData.append('userDrawing', blob, `tile-${currentTile}.png`);
-            // Post via axios or other transport method
-            axios.post('/done-drawing/' + currentTile , formData)
-                .then((res) => console.log("Success! Image has been saved"))
-                .catch((err) => console.log('err' + err))
-        });
+        // Do nothing!
     }
 }
 

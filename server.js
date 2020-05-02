@@ -8,7 +8,6 @@ const GridFsStorage = require('multer-gridfs-storage')
 const Grid = require('gridfs-stream')
 const methodOverride = require('method-override')
 const crypto = require('crypto');
-
 //so we have have environment variables in .env file
 require('dotenv').config();
 
@@ -39,6 +38,7 @@ connection.once('open', () => {
     console.log("MongoDB database connection is established successfully")
     //init stream for photo upload
     gfs = Grid(connection.db, mongoose.mongo);
+
     gfs.collection('uploads');
     launchServer(); //launch server only after the database is setup
 })
@@ -92,6 +92,11 @@ process.on('exit', () => {
 })
 
 process.on('SIGTERM', () => {
+    console.log("sigterm")
+    server.exit(1)
+})
+
+process.on('SIGTSTP', () => {
     console.log("sigterm")
     server.exit(1)
 })
