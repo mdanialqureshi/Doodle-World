@@ -53,10 +53,11 @@ function setUpPaintMenu() {
     setUpColorPicker();
 }
 
+const pickr;
 
 function setUpColorPicker() {
 
-    const pickr = Pickr.create({
+    pickr = Pickr.create({
         el: '.color-picker',
         theme: 'classic', // or 'monolith', or 'nano'
 
@@ -143,6 +144,7 @@ function clear() {
         ctx.fillRect(0, 0, width, height);
         paint_color = default_color;
         scale = 5;
+        pickr.applyColor(default_color)
     }
 }
 
