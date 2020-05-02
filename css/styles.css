@@ -15,6 +15,7 @@ header {
 body {
     background-color: #292C34;
 }
+
 .game {
     position: relative;
     display: flex;
@@ -24,7 +25,7 @@ body {
     width: 300px;
 }
 
-.game > canvas {
+.game>canvas {
     border: 1px solid white;
     background-color: white;
     border-radius: 5px;
@@ -37,7 +38,6 @@ body {
     width: 300px;
     margin: auto;
 }
-
 
 .paint-menu {
     position: absolute;
@@ -62,15 +62,14 @@ body {
     transition: all .5s ease-in-out;
 }
 
-.paint-menu .hamburger::before,
-.paint-menu .hamburger::after {
+.paint-menu .hamburger::before, .paint-menu .hamburger::after {
     content: '';
     position: absolute;
     width: 35px;
     height: 6px;
     background: transparent;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(255,101,47,.2);
+    box-shadow: 0 2px 5px rgba(255, 101, 47, .2);
     transition: all .5s ease-in-out;
 }
 
@@ -82,7 +81,6 @@ body {
 .paint-menu .hamburger::after {
     transform: translateY(10px);
     background: lightblue;
-
 }
 
 .paint-menu.open .hamburger {
@@ -92,11 +90,11 @@ body {
 }
 
 .paint-menu.open .hamburger::before {
-    transform: rotate(45deg) translate(35px,-35px);
+    transform: rotate(45deg) translate(35px, -35px);
 }
 
 .paint-menu.open .hamburger::after {
-    transform: rotate(-45deg) translate(35px,35px);
+    transform: rotate(-45deg) translate(35px, 35px);
 }
 
 .paint-menu-options {
@@ -123,3 +121,10 @@ body {
     width: 100%;
 }
 
+/* div {
+}
+
+.animated {
+    height:auto;
+    padding: 24px 18px;
+} */

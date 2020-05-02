@@ -17,28 +17,13 @@ const paint_menu_options = document.querySelector('.paint-menu-options')
 const eraser_img = document.querySelector('#eraser');
 const color_picker = document.getElementById('color-picker')
 const brush_img = document.querySelector('#brush')
-
 let menuOpen = false;
+
 (function setup() {
 
     setUpCanvas();
     setUpButtons();
     setUpPaintMenu();
-
-    // for a grid
-    // ctx.beginPath();
-    // for(let i = scale; i < height; i += scale) { 
-    //     ctx.moveTo(0,i);
-    //     ctx.lineTo(width,i);
-    //     ctx.stroke();
-    // }
-
-    // for(let i = scale; i < width; i += scale) { 
-    //     ctx.moveTo(i,0);
-    //     ctx.lineTo(i,height);
-    //     ctx.stroke();
-    //     ctx.strokeSt
-    // }
 
 }());
 
@@ -47,10 +32,10 @@ function setUpPaintMenu() {
         if (!menuOpen) {
             paint_menu.classList.add('open');
             menuOpen = true;
-            paint_menu_options.classList.add('paint-menu-options-open')
+            paint_menu_options.classList.toggle('paint-menu-options-open')
         } else {
             paint_menu.classList.remove('open');
-            paint_menu_options.classList.remove('paint-menu-options-open')
+            paint_menu_options.classList.toggle('paint-menu-options-open')
             menuOpen = false;
         }
     })
@@ -111,6 +96,7 @@ function setUpColorPicker() {
     }).on('change', (color, instance) => {
         pickr.applyColor(color)
         paint_color = color.toRGBA().toString();
+        scale = 5;
     });
 }
 
@@ -137,6 +123,17 @@ function setUpButtons() {
     save_btn.addEventListener('click', () => {
         save();
     })
+
+    exit_btn.addEventListener('click', () => {
+        exit();
+    })
+}
+
+function exit() {
+
+    let redirect = document.createElement('a');
+    redirect.setAttribute('href', 'index.html');
+    redirect.click();
 }
 
 function clear() {
@@ -150,20 +147,28 @@ function clear() {
 }
 
 function save() {
-    // here is the most important part because if you dont replace you will get a DOM 18 exception.
-    var image = canvas.toDataURL("image/png")
-    
+
     if (window.navigator.msSaveBlob) { //internet explorer only
-        window.navigator.msSaveBlob(canvas.msToBlob(),"drawing.png")
+        window.navigator.msSaveBlob(canvas.msToBlob(), "drawing.png")
     } else {
-        const a = document.createElement("a");
-        document.body.appendChild(a);
-        a.href = canvas.toDataURL();
-        a.download = "drawing.png";
-        let filename = prompt("What would you like to save the file as?")
-        a.download = filename + ".png"
-        a.click();
-        document.body.removeChild(a); //remove the child once we are done
+        console.log(sessionStorage.getItem('tilenum'))
+        // const a = document.createElement("a");
+        // document.body.appendChild(a);
+        // a.href = canvas.toDataURL();
+        // a.download = "drawing.png";
+        // let filename = prompt("What would you like to save the file as?")
+        // a.download = filename + ".png"
+        // a.click()
+        // document.body.removeChild(a); //remove the child once we are done
+        canvas.toBlob(function (blob) {
+            let currentTile = sessionStorage.getItem('tilenum')
+            const formData = new FormData();
+            formData.append('userDrawing', blob, `tile-${currentTile}.png`);
+            // Post via axios or other transport method
+            axios.post('/done-drawing/' + currentTile , formData)
+                .then((res) => console.log("Success! Image has been saved"))
+                .catch((err) => console.log('err' + err))
+        });
     }
 }
 

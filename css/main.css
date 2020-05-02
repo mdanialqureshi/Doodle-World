@@ -1,0 +1,46 @@
+:root {
+ 
+    --board-width : 500px;
+    --tile-width : calc (var(--board-width) / 5);
+    --tile-padding : 50px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.game {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 40px auto 10px auto;
+    width: var(--board-width);
+}
+
+.game div{
+    width: var(--tile-width);
+    padding: var(--tile-padding);
+    margin: 0px;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.game div:hover {
+    opacity: 0.5;
+    transition: opacity 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.game .after-img-div {
+    padding: 0;
+    width: 102px;
+    height: 102px;
+}
+
+img {
+    width: 100%;
+}
