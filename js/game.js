@@ -42,18 +42,16 @@ function setUpPaintMenu() {
 
     eraser_img.addEventListener('click', () => {
         enable_eraser();
-        console.log("eraser");
     })
 
     brush_img.addEventListener('click', () => {
         enable_brush();
-        console.log("brush");
     })
 
     setUpColorPicker();
 }
 
-const pickr;
+var pickr;
 
 function setUpColorPicker() {
 
@@ -93,7 +91,7 @@ function setUpColorPicker() {
         }
     });
     pickr.on('init', instance => {
-        pickr.setColor("black")
+        pickr.setColor(default_color)
     }).on('change', (color, instance) => {
         pickr.applyColor(color)
         paint_color = color.toRGBA().toString();
@@ -144,7 +142,7 @@ function clear() {
         ctx.fillRect(0, 0, width, height);
         paint_color = default_color;
         scale = 5;
-        pickr.applyColor(default_color)
+        pickr.setColor(default_color)
     }
 }
 
