@@ -17,7 +17,7 @@ const paint_menu_options = document.querySelector('.paint-menu-options')
 const eraser_img = document.querySelector('#eraser');
 const color_picker = document.getElementById('color-picker')
 const brush_img = document.querySelector('#brush')
-let menuOpen = false; 
+let menuOpen = false;
 
 (function setup() {
 
@@ -112,6 +112,9 @@ function setUpCanvas() {
     canvas.addEventListener("mouseout", function (e) {
         mouseStatus('out', e)
     }, false);
+    //touch screen support
+    canvas.addEventListener('touchstart', sketchpad_touchStart, false);
+    canvas.addEventListener('touchmove', sketchpad_touchMove, false);
 }
 
 function setUpButtons() {
@@ -196,3 +199,46 @@ function enable_eraser() {
     scale = 20;
 }
 
+
+//touch support 
+// Define some variables to keep track of the touch position
+var touchX, touchY;
+
+function sketchpad_touchStart() {
+    getTouchPos();
+    draw(touchX, touchY, 12);
+    // Prevents an additional mousedown event being triggered
+    event.preventDefault();
+}
+
+function sketchpad_touchMove(e) {
+    // Update the touch co-ordinates
+    getTouchPos(e);
+
+    // During a touchmove event, unlike a mousemove event, we don't need to check if the touch is engaged, since there will always be contact with the screen by definition.
+    draw(touchX, touchY, 12);
+
+    // Prevent a scrolling action as a result of this touchmove triggering.
+    event.preventDefault();
+}
+
+// Get the touch position relative to the top-left of the canvas
+// When we get the raw values of pageX and pageY below, they take into account the scrolling on the page
+// but not the position relative to our target div. We'll adjust them using "target.offsetLeft" and
+// "target.offsetTop" to get the correct values in relation to the top left of the canvas.
+function getTouchPos(e) {
+    if (!e)
+        var e = event;
+
+    if (e.touches) {
+        if (e.touches.length == 1) { // Only deal with one finger
+            var touch = e.touches[0]; // Get the information for finger #1
+            touchX = touch.pageX - touch.target.offsetLeft;
+            touchY = touch.pageY - touch.target.offsetTop;
+            //offet according to canvas
+            var rect = canvas.getBoundingClientRect()
+            touchX = (touchX - rect.left)
+            touchY = (touchY - rect.top)
+        }
+    }
+}
