@@ -2,7 +2,7 @@ const game_div = document.querySelector('.game');
 const tiles = 16; //num of tiles
 const rows = tiles / 4;
 const cols = tiles / 4;
-
+const clear_all = document.querySelector('#clear-all');
 
 
 (function setup() {
@@ -10,6 +10,7 @@ const cols = tiles / 4;
     setUpBoard();
     setUpTiles();
     setUpTileSketches();
+    setUpClear();
 
 }());
 
@@ -33,7 +34,7 @@ function setUpTiles() {
         document.getElementById(`tile-${i}`).addEventListener('click', (e) => {
             // console.log(i);
             //save to the session storage for access in save of drawing
-            sessionStorage.setItem('tilenum', i)          
+            sessionStorage.setItem('tilenum', i)
         })
     }
 
@@ -58,11 +59,28 @@ function setUpTileSketches() {
                     tile.appendChild(img);
                     //remove the ref to the game
                     // this makes sure that the board cannot be edited when there is already a drawing in place
-                    document.querySelector(`#ref-tile-${i}`).setAttribute('href',`/images/tile-${i}.png`)
+                    document.querySelector(`#ref-tile-${i}`).setAttribute('href', `/images/tile-${i}.png`)
                 } else {
                     // console.log("no" + i)
                 }
             })
             .catch(err => "Error:" + err)
     }
+}
+
+
+function setUpClear() {
+
+    clear_all.addEventListener('click', () => {
+        var pass = prompt("Please enter the admin password to clear the board.")
+        axios.post('/clear-board', { password: pass })
+            .then(response => {
+                if (response.data === "Database cleared!") {
+                    window.location.reload()
+                } else {
+                    alert("Wrong password! Unable to clear the board.")
+                }
+            })
+            .catch(err => "Error: " + err)
+    })
 }

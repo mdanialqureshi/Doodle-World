@@ -10,10 +10,10 @@ module.exports = function (app, router, upload, gfs) {
   //         .then((data) => res.json(`tile num ${req.params.tile} sent!`))
   //         .catch((err) => res.status(400).json("Error: " + err))
   // })
-  
+
   //to test if backend api is working
   router.route('/ok').get((req, res) => {
-      res.send(Date().toString().substring(0, 16));
+    res.send(Date().toString().substring(0, 16));
   })
 
 
@@ -97,4 +97,5 @@ module.exports = function (app, router, upload, gfs) {
       }
     })
   })
+
 }

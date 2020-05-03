@@ -72,12 +72,30 @@ app.use('/', router);
 
 var sketch = require('./routes/sketch')
 
-function launchServer(){
+function launchServer() {
     const server = app.listen(port, () => {
         console.log(`Server is lisenting on port ${port}`);
     })
     sketch(app, router, upload, gfs) //initalize the sketch routes and queries only once the db and server are launched
 }
+
+app.post('/clear-board', (req, res) => {
+
+    //cant clear board unless password is right
+    if (req.body.password === process.env.CLR_PASS) {
+
+        mongoose.connection.db.dropCollection('uploads.files', (err, result) => {
+            if (err) throw err;
+        });
+        mongoose.connection.db.dropCollection('uploads.chunks', (err, result) => {
+            if (err) throw err;
+        });
+        res.send("Database cleared!")
+    } else {
+        res.send("Wrong Password.")
+    }
+
+})
 
 //for cntrl c
 process.on('SIGINT', function () {

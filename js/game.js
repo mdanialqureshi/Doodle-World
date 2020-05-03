@@ -17,7 +17,7 @@ const paint_menu_options = document.querySelector('.paint-menu-options')
 const eraser_img = document.querySelector('#eraser');
 const color_picker = document.getElementById('color-picker')
 const brush_img = document.querySelector('#brush')
-let menuOpen = false;
+let menuOpen = false; 
 
 (function setup() {
 
