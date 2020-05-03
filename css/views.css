@@ -1,0 +1,10 @@
+* { 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.image-container {
+    background-color: white;
+    border-radius: 5%;
+}
