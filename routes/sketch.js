@@ -98,4 +98,12 @@ module.exports = function (app, router, upload, gfs) {
     })
   })
 
+  router.get('/images/view/:filename', (req, res) => {
+      let imgUrl = `/images/${req.params.filename}`
+      res.render('drawings.ejs', {
+        url: imgUrl,
+        tileNum: parseInt(req.params.filename.toString().charAt(5)) + 1
+      })
+  })
+
 }

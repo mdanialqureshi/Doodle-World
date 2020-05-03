@@ -17,6 +17,11 @@ app.use(cors());
 //parse json in server so we dont need middleware like body-parser
 app.use(express.json());
 
+//set the view engine otherwise known as the template engine
+// by deafult it will look in a view folder so need to create 
+// that, This view engine is only for rendering already draw images
+app.set('view engine', 'ejs');
+
 //static files 
 app.use('/css', express.static('css'))
 app.use('/js', express.static('js'))

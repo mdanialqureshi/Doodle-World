@@ -173,7 +173,7 @@ function save() {
                 // wait a bit before exiting so pic has tome to get to db and render on index.html page
                 setTimeout(() => {
                     exit()
-                }, 800)
+                }, 650)
             })
             .catch(err => "Error" + err)
     } else {
