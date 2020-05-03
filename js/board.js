@@ -5,13 +5,19 @@ const cols = tiles / 4;
 const clear_all = document.querySelector('#clear-all');
 
 
+function isMobile() {
+    if (!mobileAlertOnce && typeof window.orientation !== 'undefined') {
+        alert("Doodle world is not yet fully optimized for mobile (but it does work). For a optimal doodle experience check us out on a desktop!")
+    }
+}
+
 (function setup() {
 
     setUpBoard();
     setUpTiles();
     setUpTileSketches();
     setUpClear();
-
+    // isMobile();
 }());
 
 function setUpBoard() {
