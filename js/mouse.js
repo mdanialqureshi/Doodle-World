@@ -16,14 +16,16 @@ function mouseStatus(res, e) {
     let mousePos = getMousePos(canvas,e)
     if (res == 'down') {
         flag = true;
-        draw(mousePos.x,mousePos.y);
+        xSrc = mousePos.x;
+        ySrc = mousePos.y;
+        draw(mousePos.x,mousePos.y,e);
     }
     if (res == 'up' || res == "out") {
         flag = false;
     }
     if (res == 'move') {
         if (flag) {
-            draw(mousePos.x,mousePos.y);
+            draw(mousePos.x,mousePos.y,e);
         }
     }
 }

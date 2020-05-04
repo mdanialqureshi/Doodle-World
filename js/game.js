@@ -1,11 +1,9 @@
 //canvas
 const canvas = document.querySelector('.canvas');
 const ctx = canvas.getContext('2d');
-let scale = 5; //pixles per box
+let userLineWidth = 5; //width of drawing line
 const width = canvas.width
 const height = canvas.height
-const cols = width / scale;
-const rows = height / scale;
 let flag = false;
 let default_color = 'black'
 let paint_color = 'blue';
@@ -18,6 +16,8 @@ const eraser_img = document.querySelector('#eraser');
 const color_picker = document.getElementById('color-picker')
 const brush_img = document.querySelector('#brush')
 let menuOpen = false;
+//hold old coordiates of mouse position
+var xSrc, ySrc;
 
 (function setup() {
 
@@ -95,7 +95,7 @@ function setUpColorPicker() {
     }).on('change', (color, instance) => {
         pickr.applyColor(color)
         paint_color = color.toRGBA().toString();
-        scale = 5;
+        userLineWidth = 5;
     });
 }
 
@@ -144,7 +144,7 @@ function clear() {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, width, height);
         paint_color = default_color;
-        scale = 5;
+        userLineWidth = 5;
         pickr.setColor(default_color)
     }
 }
@@ -184,19 +184,31 @@ function save() {
     }
 }
 
-function draw(x, y) {
-    ctx.fillStyle = paint_color;
-    ctx.fillRect(x, y, scale, scale);
+function draw(x, y, e) {
+
+    ctx.beginPath();
+    ctx.moveTo(xSrc, ySrc);
+    ctx.lineCap = 'round';
+    ctx.lineWidth = userLineWidth;
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = paint_color;
+    ctx.stroke();
+    xSrc = x;
+    ySrc = y;
+
+
+    //     ctx.fillStyle = paint_color;
+    //     ctx.fillRect(x, y, userLineWidth, userLineWidth);
 }
 
 function enable_brush() {
-    paint_color = 'black';
-    scale = 5;
+    paint_color = pickr._color.toRGBA();
+    userLineWidth = 5;
 }
 
 function enable_eraser() {
     paint_color = "white";
-    scale = 20;
+    userLineWidth = 10;
 }
 
 
@@ -206,6 +218,8 @@ var touchX, touchY;
 
 function sketchpad_touchStart() {
     getTouchPos();
+    xSrc = touchX;
+    ySrc = touchY;
     draw(touchX, touchY, 12);
     // Prevents an additional mousedown event being triggered
     event.preventDefault();
