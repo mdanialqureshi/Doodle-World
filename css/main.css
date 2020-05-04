@@ -20,7 +20,7 @@ header {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 40px auto 10px auto;
+    margin: 15px auto 10px auto;
     width: var(--board-width);
 }
 

@@ -5,6 +5,7 @@
 }
 
 .image-container {
+    margin: 15px auto 10px auto;
     background-color: white;
     border-radius: 5%;
 }
