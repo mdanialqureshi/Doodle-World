@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 
-
 .header-container {
     display: flex;
     flex-wrap: wrap;
@@ -12,6 +11,7 @@
     align-items: center;
     margin-top: 30px;
 }
+
 header {
     text-align: center;
     background: black;
@@ -34,9 +34,9 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 40px auto 10px auto;
+    margin: 0px auto 10px auto;
     width: 400px;
-} 
+}
 
 .game>canvas {
     border: 1px solid white;
@@ -138,10 +138,76 @@ body {
     width: 100%;
 }
 
-/* div {
+.slider-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 10px auto 0px auto;
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 400px;
+    border-radius: 5px;
+}
+.slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
 }
 
-.animated {
-    height:auto;
-    padding: 24px 18px;
-} */
+.slider {
+    position: relative;
+}
+
+.slider .bar {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 7px;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #c6aee7;
+    overflow: hidden;
+}
+.slider .bar .fill {
+    display: block;
+    width: 0%;
+    height: 100%;
+    background-color: #7536db;
+}
+.slider #brush-size {
+    position: relative;
+    z-index: 2;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    outline: none;
+    background-color: transparent
+}
+
+.slider #brush-size::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #6200ee;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 0 0 0 rgba(98, 0, 238, .1);
+    transition: .3s ease-in-out;
+}
+
+.slider #brush-size::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 10px rgba(98, 0, 238, .1);
+}
+
+.slider #brush-size:active::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 10px rgba(98, 0, 238, .1);
+}
+
+.slider-container h6 {  
+    margin-top: 4px;
+    font-weight: bold;
+}

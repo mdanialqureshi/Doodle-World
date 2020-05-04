@@ -16,6 +16,9 @@ const eraser_img = document.querySelector('#eraser');
 const color_picker = document.getElementById('color-picker')
 const brush_img = document.querySelector('#brush')
 let menuOpen = false;
+var $slider_label = $('.slider-container #slider-label')
+const draw_slider_msg = "Paint Brush Size:";
+const eraser_slider_msg = "Eraser Size:"
 //hold old coordiates of mouse position
 var xSrc, ySrc;
 
@@ -57,24 +60,8 @@ function setUpColorPicker() {
 
     pickr = Pickr.create({
         el: '.color-picker',
-        theme: 'classic', // or 'monolith', or 'nano'
-
-        // swatches: [
-        //     'rgba(244, 67, 54, 1)',
-        //     'rgba(233, 30, 99, 0.95)',
-        //     'rgba(156, 39, 176, 0.9)',
-        //     'rgba(103, 58, 183, 0.85)',
-        //     'rgba(63, 81, 181, 0.8)',
-        //     'rgba(33, 150, 243, 0.75)',
-        //     'rgba(3, 169, 244, 0.7)',
-        //     'rgba(0, 188, 212, 0.7)',
-        //     'rgba(0, 150, 136, 0.75)',
-        //     'rgba(76, 175, 80, 0.8)',
-        //     'rgba(139, 195, 74, 0.85)',
-        //     'rgba(205, 220, 57, 0.9)',
-        //     'rgba(255, 235, 59, 0.95)',
-        //     'rgba(255, 193, 7, 1)'
-        // ],
+        theme: 'monolith', // or 'monolith', or 'nano'
+        position: 'left',
         components: {
 
             // Main components
@@ -95,7 +82,8 @@ function setUpColorPicker() {
     }).on('change', (color, instance) => {
         pickr.applyColor(color)
         paint_color = color.toRGBA().toString();
-        userLineWidth = 5;
+        userLineWidth = $slider.val();
+        $slider_label.html(draw_slider_msg)
     });
 }
 
@@ -144,7 +132,7 @@ function clear() {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, width, height);
         paint_color = default_color;
-        userLineWidth = 5;
+        userLineWidth = $slider.val();
         pickr.setColor(default_color)
     }
 }
@@ -203,12 +191,14 @@ function draw(x, y, e) {
 
 function enable_brush() {
     paint_color = pickr._color.toRGBA();
-    userLineWidth = 5;
+    userLineWidth = $slider.val();
+    $slider_label.html(draw_slider_msg)
 }
 
 function enable_eraser() {
     paint_color = "white";
-    userLineWidth = 10;
+    userLineWidth = $slider.val();
+    $slider_label.html(eraser_slider_msg)
 }
 
 
@@ -256,3 +246,15 @@ function getTouchPos(e) {
         }
     }
 }
+
+//jquery for slider for brush and eraser size
+var $slider = $("#brush-size")
+var $fill = $(".bar .fill");
+
+function setBar() {
+    $fill.css("width",(($slider.val()/25)*100 - 1.88) + "%")
+    userLineWidth = $slider.val();
+}
+//initally fill the slider bar
+setBar();
+$slider.on("input",setBar);
