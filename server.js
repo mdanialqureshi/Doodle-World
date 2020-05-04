@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 app.use('/css', express.static('css'))
 app.use('/js', express.static('js'))
 //this will load a index.html file by deafult
-app.use('/', express.static('html'))
+app.use('/', express.static('html', { index: 'login.html' }))
 app.use('/images', express.static('images'))
 
 //use a query string for delete request
@@ -72,6 +72,14 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 const router = express.Router();
+
+//
+// app.get("*", (req, res, next) => {
+//     res.sendFile(
+//         path.resolve(__dirname + "/html/index.html")
+//     )
+// })
+
 
 app.use('/', router);
 

@@ -17,6 +17,7 @@ module.exports = function (app, router, upload, gfs) {
   })
 
 
+
   // @route POST /upload
   // @desc  Uploads file to DB
   router.post('/done-drawing/:tile', upload.single('userDrawing'), (req, res) => {
@@ -99,11 +100,16 @@ module.exports = function (app, router, upload, gfs) {
   })
 
   router.get('/images/view/:filename', (req, res) => {
-      let imgUrl = `/images/${req.params.filename}`
-      res.render('drawings.ejs', {
-        url: imgUrl,
-        tileNum: parseInt(req.params.filename.toString().charAt(5)) + 1
-      })
+    let imgUrl = `/images/${req.params.filename}`
+    res.render('drawings.ejs', {
+      url: imgUrl,
+      tileNum: parseInt(req.params.filename.toString().charAt(5)) + 1
+    })
+  })
+
+  //The 404 Route (ALWAYS Keep this as the last route)
+  app.use(function (req, res, next) {
+    res.status(404).render('404.ejs')
   })
 
 }
