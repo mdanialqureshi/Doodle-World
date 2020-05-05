@@ -2,7 +2,8 @@ const game_div = document.querySelector('.game');
 const tiles = 16; //num of tiles
 const rows = tiles / 4;
 const cols = tiles / 4;
-const clear_all = document.querySelector('#clear-all');
+const clear_all_btn = document.querySelector('#clear-all');
+const log_out_btn = document.querySelector('#logout')
 
 
 function isMobile() {
@@ -16,7 +17,7 @@ function isMobile() {
     setUpBoard();
     setUpTiles();
     setUpTileSketches();
-    setUpClear();
+    setUpBtns();
     // isMobile();
 }());
 
@@ -28,7 +29,7 @@ function setUpBoard() {
         game_tile.setAttribute('id', `tile-${i}`)
         redirect = document.createElement('a');
         redirect.setAttribute('id', `ref-tile-${i}`)
-        redirect.setAttribute('href', './game.html')
+        // redirect.setAttribute('href', './game.html')
         redirect.appendChild(game_tile)
         game_div.appendChild(redirect)
     }
@@ -40,6 +41,11 @@ function setUpTiles() {
         document.getElementById(`tile-${i}`).addEventListener('click', (e) => {
             // console.log(i);
             //save to the session storage for access in save of drawing
+            let redirectUrl = window.location.href.toString();
+            redirectUrl = redirectUrl.replace('home', 'game')
+            let redirect = document.createElement('a');
+            redirect.setAttribute('href', redirectUrl);
+            redirect.click();
             sessionStorage.setItem('tilenum', i)
         })
     }
@@ -75,9 +81,16 @@ function setUpTileSketches() {
 }
 
 
-function setUpClear() {
+function setUpBtns() {
 
-    clear_all.addEventListener('click', () => {
+    
+    set_clear_all();
+    set_logout();
+
+}
+
+function set_clear_all () {
+    clear_all_btn.addEventListener('click', () => {
         var pass = prompt("Please enter the admin password to clear the board.")
         axios.post('/clear-board', { password: pass })
             .then(response => {
@@ -89,4 +102,16 @@ function setUpClear() {
             })
             .catch(err => "Error: " + err)
     })
+}
+
+function set_logout() {
+
+    log_out_btn.addEventListener('click', () => {
+        let redirectUrl = window.location.href.toString();
+        redirectUrl = redirectUrl.replace('home', 'users/logout')
+        let redirect = document.createElement('a');
+        redirect.setAttribute('href', redirectUrl);
+        redirect.click();
+    })
+
 }

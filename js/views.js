@@ -16,7 +16,7 @@ function goBack() {
     // redirectUrl = redirectUrl.replace(/[0-9]/g, "")
     //rid of .png
     redirectUrl = redirectUrl.substring(0, redirectUrl.length - 4)
-    redirectUrl = redirectUrl + 'index.html'
+    redirectUrl = redirectUrl + 'home'
     let redirect = document.createElement('a');
     redirect.setAttribute('href', redirectUrl);
     redirect.click();

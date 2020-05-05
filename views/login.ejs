@@ -20,19 +20,19 @@
 
 <body>
     <div class="header-container">
-        <header>Login! EJS</header>
+        <header>Login!</header>
     </div>
 
     <div class="page">
         <ul>
             <% if(login_msg_obj.errors.length > 0) { login_msg_obj.errors.forEach((obj) => { %>
-                <li><%= obj.msg %></li>
+            <li><%= obj.msg %></li>
             <% }) } %>
         </ul>
-            <% if(login_msg_obj.msg.length > 0) { %>
-                <div class="success-msg"> <%= login_msg_obj.msg %></div>
-            <% } %>
-        
+        <% if(login_msg_obj.msg.length > 0) { %>
+        <div class="success-msg"> <%= login_msg_obj.msg %></div>
+        <% } %>
+
         <form action="/users/login" method="POST" class="speaker-form">
             <!--post when you’re changing data on the server, 
                 reserving get for when you’re only getting data.-->
@@ -45,10 +45,11 @@
                 <button type='submit' id="login" name="submit" value="Login">Login</button>
             </div>
         </form>
-
-        <div class="header-container">
-            <header>Dont have an account? Sign Up!</header>
-        </div>
+    </div>
+    <div class="header-container">
+        <header>Don't Have an Account? Sign Up!</header>
+    </div>
+    <div class="page">
         <form action="/users/register" method="POST" class="speaker-form">
             <div class="form-row">
 
@@ -60,13 +61,12 @@
                 <label for="reg_password">Password</label>
                 <input id="reg_password" name="reg_password" type='password' placeholder="Enter Password" />
                 <label for="confirm_reg_password">Re-enter</label>
-                <input id="confirm_reg_password" name="confirm_reg_password" type='password' placeholder="Confirm Password" />
+                <input id="confirm_reg_password" name="confirm_reg_password" type='password'
+                    placeholder="Confirm Password" />
                 <button type='submit' id="signup" name="submit" value="Register">Sign Up</button>
             </div>
+        </form>
     </div>
-    </form>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-    <script src="../js/login.js"></script>
 </body>
 
 </html>

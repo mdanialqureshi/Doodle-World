@@ -16,7 +16,16 @@
     justify-content: center;
     flex-wrap: wrap;
     width: 90%;
-    margin: auto;
+    margin: 0 auto 0 auto;
+}
+
+.header-container {
+    margin-top: 20px;
+}
+
+
+.header-container:first-of-type {
+    margin-top: 40px;
 }
 
 .speaker-form {
@@ -28,7 +37,7 @@
     background-color: rgba(255, 255, 255, 0.9);
 }
 
-.speaker-form:last-of-type {
+.page:last-of-type {
     margin-bottom: 40px;
 }
 
@@ -67,28 +76,6 @@
 .form-row input[type='text']:focus, .form-row input[type='email']:focus, input[type='password']:focus {
     border: 1px solid lightblue;
     background-color: lightskyblue;
-}
-
-.legacy-form-row {
-    border: none;
-    margin-bottom: 40px;
-}
-
-.legacy-form-row legend {
-    margin-bottom: 15px;
-}
-
-.legacy-form-row .radio-label {
-    display: block;
-    font-size: 14px;
-}
-
-.legacy-form-row input[type='radio'] {
-    margin: 2px 2px 0px 0px;
-}
-
-.legacy-form-row .radio-label, .legacy-form-row input[type='radio'] {
-    float: left;
 }
 
 .form-row select {
@@ -154,6 +141,7 @@ ul {
     width: 65%;
     text-align: center;
     list-style: none;
+    max-width: 404px;
 }
 
 .success-msg {
@@ -168,6 +156,7 @@ ul {
     font-weight: 550;
     width: 65%;
     text-align: center;
+    max-width: 404px;
 }
 
 /* desktops */

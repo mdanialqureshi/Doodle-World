@@ -15,10 +15,10 @@ router.get('/register', urlencodedParser, function (req, res, next) {
     res.render('login');
 });
 
-router.get('/login', function (req, res, next) {
+router.get('/login', urlencodedParser, function (req, res, next) {
     res.render('login', {
         login_msg_obj: {
-            errors: [{msg: "Invalid username or password!"}],
+            errors: [{ msg: "Invalid username or password!" }],
             msg: '',
         }
     });
@@ -27,7 +27,7 @@ router.get('/login', function (req, res, next) {
 router.post('/login', urlencodedParser,
     passport.authenticate('local', { failureRedirect: '/users/login', failureFlash: 'Invalid username or password' }),
     function (req, res) {
-        res.redirect('/index.html');
+        res.redirect('/home');
     });
 
 passport.serializeUser(function (user, done) {
@@ -84,19 +84,26 @@ router.post('/register', urlencodedParser, function (req, res, next) {
         login_msg_obj.msg = ''
         res.render('login', { login_msg_obj: login_msg_obj })
     } else {
+
         var newUser = new User({
             email: email,
             username: username,
             password: password,
         });
 
+
         User.createUser(newUser, function (err, user) {
-            if (err) throw err;
+            // if (err) throw err;
+            if (err) {
+                login_msg_obj.msg = "Username/Email is already in use!"
+                res.render('login', { login_msg_obj: login_msg_obj })
+            } else {
+                login_msg_obj.msg = "Account registered sucessfully!"
+                res.render('login', { login_msg_obj: login_msg_obj })
+            }
             // console.log(user);
         });
 
-        login_msg_obj.msg = "Account registered sucessfully!"
-        res.render('login', { login_msg_obj: login_msg_obj })
         // res.location('/');
         // res.redirect('/');
     }
@@ -105,7 +112,12 @@ router.post('/register', urlencodedParser, function (req, res, next) {
 router.get('/logout', function (req, res) {
     req.logout();
     //   req.flash('success', 'You are now logged out');
-    res.redirect('/users/login');
+    res.render('login', {
+        login_msg_obj: {
+            errors: [],
+            msg: 'You have been logged out!',
+        }
+    });
 });
 
 module.exports = router;

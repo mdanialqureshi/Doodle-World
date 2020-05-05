@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <title>Doodle World</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+    <!-- 'classic' theme -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" /> -->
+    <!-- 'monolith' theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css"/>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <meta name='viewport' content="width=device-width initial-scale=1.0" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+</head>
+<style>
+    body {
+        font-family: 'Asap', sans-serif;
+    }
+</style>
+</head>
+
+<body>
+    <div class="header-container">
+        <header>
+            Doodle Away!
+            <button id="logout" class="btn btn-danger">Logout</button>
+        </header>
+    </div>
+
+    <div class="slider-container">
+        <h6 id="slider-label">Paint Brush Size:</h6>
+        <div class="slider">
+            <span class="bar"><span class="fill"></span></span>
+            <input id='brush-size' type="range" min="1" max="25" value="5"><br>
+        </div>
+    </div>
+    <div class="game">
+        <canvas class="canvas" width="400px" height="400px"></canvas>
+        <div class="paint-menu">
+            <div class="hamburger"></div>
+            <div class="paint-menu-options">
+                <ul>
+                    <li><img id="brush" src="images/brush.png">
+                    <li><img id="eraser" src="images/eraser.png"></li>
+                    <li>
+                        <div class='color-picker'></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="menu">
+        <button id='save' class="btn btn-primary">Save</button>
+        <button id='clear' class="btn btn-warning">Clear</button>
+        <button id='exit' class="btn btn-danger">Exit</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <script src="../js/mouse.js"></script>
+    <script src="../js/game.js"></script>
+</body>
+
+</html>

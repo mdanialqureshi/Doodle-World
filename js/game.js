@@ -19,6 +19,8 @@ let menuOpen = false;
 var $slider_label = $('.slider-container #slider-label')
 const draw_slider_msg = "Paint Brush Size:";
 const eraser_slider_msg = "Eraser Size:"
+const log_out_btn = document.querySelector('#logout')
+
 //hold old coordiates of mouse position
 var xSrc, ySrc;
 
@@ -117,12 +119,21 @@ function setUpButtons() {
     exit_btn.addEventListener('click', () => {
         exit();
     })
+
+    log_out_btn.addEventListener('click', () => {
+        logout_game();
+    })
 }
 
 function exit() {
 
+    // let redirect = document.createElement('a');
+    // redirect.setAttribute('href', 'index.html');
+    // redirect.click();
+    let redirectUrl = window.location.href.toString();
+    redirectUrl = redirectUrl.replace('game', 'home')
     let redirect = document.createElement('a');
-    redirect.setAttribute('href', 'index.html');
+    redirect.setAttribute('href', redirectUrl);
     redirect.click();
 }
 
@@ -154,7 +165,7 @@ function save() {
                         formData.append('userDrawing', blob, `tile-${currentTile}.png`);
                         // Post via axios or other transport method
                         axios.post('/done-drawing/' + currentTile, formData)
-                            .then((res) => console.log("Success! Image has been saved"))
+                            .then((res) => { })
                             .catch((err) => console.log('err' + err))
                     });
                     //user has saved so clear the canvas for safe measure and exit to the homepage
@@ -252,9 +263,17 @@ var $slider = $("#brush-size")
 var $fill = $(".bar .fill");
 
 function setBar() {
-    $fill.css("width",(($slider.val()/25)*100 - 1.88) + "%")
+    $fill.css("width", (($slider.val() / 25) * 100 - 1.88) + "%")
     userLineWidth = $slider.val();
 }
 //initally fill the slider bar
 setBar();
-$slider.on("input",setBar);
+$slider.on("input", setBar);
+
+function logout_game() {
+    let redirectUrl = window.location.href.toString();
+    redirectUrl = redirectUrl.replace('game', 'users/logout')
+    let redirect = document.createElement('a');
+    redirect.setAttribute('href', redirectUrl);
+    redirect.click();
+}

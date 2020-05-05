@@ -13,14 +13,12 @@ module.exports = function (app, router, upload, gfs) {
 
 
   //login page 
-  router.get('/',ensureAuthenticated, (req, res) => {
-    res.render('login')
+  router.get('/', (req, res) => {
+    res.render('login', {login_msg_obj: {
+      errors : [],
+      msg : ""
+    }})
   })
-
-    //login page 
-    router.get('/index.html',ensureAuthenticated, (req, res) => {
-      res.send("ok");
-    })
 
   function ensureAuthenticated(req, res, next){
     if(req.isAuthenticated()){
@@ -34,6 +32,13 @@ module.exports = function (app, router, upload, gfs) {
     res.send(Date().toString().substring(0, 16));
   })
 
+  router.get('/home',ensureAuthenticated,(req, res) => {
+      res.render('index')
+  })
+
+  router.get('/game',ensureAuthenticated,(req, res) => {
+    res.render('game')
+})
 
 
   // @route POST /upload
@@ -48,25 +53,25 @@ module.exports = function (app, router, upload, gfs) {
   // @route GET /files
   // @desc Display all files in JSON
   // backend api to see files in database
-  router.get('/files', (req, res) => {
-    gfs.files.find().toArray((err, files) => {
-      // Check if files
-      if (!files || files.length === 0) {
-        return res.status(404).json({
-          err: 'No files exist'
-        });
-      }
+  // router.get('/files', (req, res) => {
+  //   gfs.files.find().toArray((err, files) => {
+  //     // Check if files
+  //     if (!files || files.length === 0) {
+  //       return res.status(404).json({
+  //         err: 'No files exist'
+  //       });
+  //     }
 
-      // Files exist
-      return res.json(files);
-    });
-  })
+  //     // Files exist
+  //     return res.json(files);
+  //   });
+  // })
 
 
   // @route GET /file:filename
   // @desc Display a file by its file name
   // backend api to see a file with a file name in database
-  router.get('/files/:filename', (req, res) => {
+  router.get('/files/:filename', ensureAuthenticated,(req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
       // Check if file exsits
       if (!file || file.length === 0) {
@@ -82,7 +87,7 @@ module.exports = function (app, router, upload, gfs) {
   // @route GET /image:filename
   // @desc Display an image from the database
   // backend api call to display an image
-  router.get('/images/:filename', (req, res) => {
+  router.get('/images/:filename',ensureAuthenticated, (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
       // Check if file exsits
       if (!file || file.length === 0) {
@@ -104,7 +109,7 @@ module.exports = function (app, router, upload, gfs) {
   })
 
   //checks if there is a drawing in the tile
-  router.get('/images/exist/:filename', (req, res) => {
+  router.get('/images/exist/:filename',ensureAuthenticated, (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
       // Check if file exsits
       if (!file || file.length === 0) {
@@ -117,7 +122,7 @@ module.exports = function (app, router, upload, gfs) {
     })
   })
 
-  router.get('/images/view/:filename', (req, res) => {
+  router.get('/images/view/:filename',ensureAuthenticated, (req, res) => {
     let imgUrl = `/images/${req.params.filename}`
     res.render('drawings.ejs', {
       url: imgUrl,

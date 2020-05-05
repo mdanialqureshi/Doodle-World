@@ -21,7 +21,8 @@ header {
     border-radius: 20px;
     color: white;
     opacity: 0.9;
-    width: 404px;
+    width: 70%;
+    max-width: 404px;
 }
 
 body {

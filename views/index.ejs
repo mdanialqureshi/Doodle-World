@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 
 <head>
-    <meta charset="utf-8" />
-    <title>Drawing View</title>
+    <meta charset='utf-8' />
+    <title>Game Board</title>
+    <meta name="viewport" content="width=device-width initial-scale=1.0" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/styles.css" type="text/css" />
-    <link rel='stylesheet' href='/css/views.css' />
-    <meta name='viewport' content="width=device-width initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/main.css" />
     <link
         href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet">
@@ -20,19 +20,20 @@
 
 <body>
     <div class="header-container">
-        <header>Tile <%= tileNum %>'s Doodles</header>
+    <header>Welcome To Doodle World!
+        <button id="logout" class="btn btn-danger">Logout</button>
+    </header>
     </div>
 
-    <div class="game image-container">
-        <img src="<%= url %>" />
+    <div class="game">
+
     </div>
 
     <div class="menu">
-        <button id='back-btn' class="btn btn-danger">Back</button>
+        <button id='clear-all' class="btn btn-primary">Clear All</button>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-    <script src="/js/views.js"></script>
+    <script src="../js/board.js"></script>
 </body>
 
 </html>
