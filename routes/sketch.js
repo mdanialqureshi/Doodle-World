@@ -11,8 +11,26 @@ module.exports = function (app, router, upload, gfs) {
   //         .catch((err) => res.status(400).json("Error: " + err))
   // })
 
+
+  //login page 
+  router.get('/',ensureAuthenticated, (req, res) => {
+    res.render('login')
+  })
+
+    //login page 
+    router.get('/index.html',ensureAuthenticated, (req, res) => {
+      res.send("ok");
+    })
+
+  function ensureAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+      return next();
+    }
+    res.redirect('/users/login');
+  }
+
   //to test if backend api is working
-  router.route('/ok').get((req, res) => {
+  router.route('/ok').get(ensureAuthenticated,(req, res) => {
     res.send(Date().toString().substring(0, 16));
   })
 
@@ -20,7 +38,7 @@ module.exports = function (app, router, upload, gfs) {
 
   // @route POST /upload
   // @desc  Uploads file to DB
-  router.post('/done-drawing/:tile', upload.single('userDrawing'), (req, res) => {
+  router.post('/done-drawing/:tile', ensureAuthenticated,upload.single('userDrawing'), (req, res) => {
 
     // console.log(req.file)
     // console.log(req.params.tile)

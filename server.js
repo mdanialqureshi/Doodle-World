@@ -8,6 +8,17 @@ const GridFsStorage = require('multer-gridfs-storage')
 const Grid = require('gridfs-stream')
 const methodOverride = require('method-override')
 const crypto = require('crypto');
+const cookieParser = require('cookie-parser')
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
+const bcrypt = require('bcryptjs');
+const expressValidator = require('express-validator');
+
+//parsing non json form data
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 //so we have have environment variables in .env file
 require('dotenv').config();
 
@@ -28,9 +39,45 @@ app.use('/js', express.static('js'))
 //this will load a index.html file by deafult
 app.use('/', express.static('html', { index: 'login.html' }))
 app.use('/images', express.static('images'))
-
 //use a query string for delete request
 app.use(methodOverride('_method'))
+
+//Handle sessions
+app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}))
+
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Validator
+app.use(expressValidator({
+    errorFormatter: function (param, msg, value) {
+        var namespace = param.split('.')
+            , root = namespace.shift()
+            , formParam = root;
+
+        while (namespace.length) {
+            formParam += '[' + namespace.shift() + ']';
+        }
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        };
+    }
+}));
+
+app.use(cookieParser());
+
+app.use(flash());
+app.use(function (req, res, next) {
+    res.locals.messages = require('express-messages')(req, res);
+    next();
+});
 
 const uri = process.env.DOODLEDB;
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
@@ -73,13 +120,8 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-//
-// app.get("*", (req, res, next) => {
-//     res.sendFile(
-//         path.resolve(__dirname + "/html/index.html")
-//     )
-// })
-
+var user = require('./routes/users')
+app.use('/users', user)
 
 app.use('/', router);
 
