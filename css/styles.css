@@ -10,6 +10,7 @@
     justify-content: center;
     align-items: center;
     margin: 30px auto 10px auto;
+    width: 70%;
 }
 
 header {
@@ -21,11 +22,16 @@ header {
     border-radius: 20px;
     color: white;
     opacity: 0.9;
-    width: 70%;
+    width: 100%;
     max-width: 404px;
 }
 
 body {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     background-color: #292C34;
     background: url(../images/doodle-background.jpg) center;
 }
@@ -49,7 +55,7 @@ body {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    width: 400px;
+    width: 60%;
     margin: auto;
     background: white;
     padding: 10px;
@@ -149,6 +155,7 @@ body {
     width: 400px;
     border-radius: 5px;
 }
+
 .slider {
     display: flex;
     justify-content: center;
@@ -171,12 +178,14 @@ body {
     background-color: #c6aee7;
     overflow: hidden;
 }
+
 .slider .bar .fill {
     display: block;
     width: 0%;
     height: 100%;
     background-color: #7536db;
 }
+
 .slider #brush-size {
     position: relative;
     z-index: 2;
@@ -208,7 +217,16 @@ body {
     box-shadow: 0 0 0 10px rgba(98, 0, 238, .1);
 }
 
-.slider-container h6 {  
+.slider-container h6 {
     margin-top: 4px;
     font-weight: bold;
+}
+
+@media only screen and (min-width: 600px) {
+    .menu {
+        width: 400px;
+    }
+    body {
+        flex-direction: column;
+    }
 }

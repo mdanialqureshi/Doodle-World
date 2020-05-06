@@ -8,11 +8,17 @@ const User = require('../models/users.model');
 
 
 router.get('/', urlencodedParser, function (req, res, next) {
-    res.render('login');
+    res.render('login', {login_msg_obj: {
+        errors : [],
+        msg : ""
+      }})
 });
 
 router.get('/register', urlencodedParser, function (req, res, next) {
-    res.render('login');
+    res.render('login', {login_msg_obj: {
+        errors : [],
+        msg : ""
+      }})
 });
 
 router.get('/login', urlencodedParser, function (req, res, next) {

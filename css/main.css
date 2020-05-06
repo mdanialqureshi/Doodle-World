@@ -3,6 +3,8 @@
     --board-width : 500px;
     --tile-width : calc (var(--board-width) / 5);
     --tile-padding : 50px;
+    --tile-padding-mobile : 50px;
+    --board-width-mobile : 400px;
 }
 
 * {
@@ -11,17 +13,13 @@
     box-sizing: border-box;
 }
 
-header {
-    width: 404px;
-}
-
 .game {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin: 15px auto 10px auto;
-    width: var(--board-width);
+    width: var(--board-width-mobile);
 }
 
 .game div{
@@ -46,4 +44,16 @@ header {
 
 img {
     width: 100%;
+}
+
+
+@media only screen and (min-width: 600px) {
+    header {
+        width: 404px;
+    }
+
+    .game {
+        width: var(--board-width);
+    }
+
 }
