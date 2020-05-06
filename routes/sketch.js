@@ -29,33 +29,7 @@ module.exports = function (router, upload, gfs, storage) {
   })
 
   router.get('/home', ensureAuthenticated, (req, res) => {
-
-
-    // gfs.collection('uploads' + req.user.username);
-    // storage = {
-    //   url: process.env.DOODLEDB,
-    //   options: { useUnifiedTopology: true },
-    //   file: (req, file) => {
-    //     return new Promise((resolve, reject) => {
-    //       crypto.randomBytes(16, (err, buf) => {
-    //         if (err) {
-    //           return reject(err);
-    //         }
-    //         const filename = file.originalname;
-    //         //bucket name must match the collection name
-    //         const fileInfo = {
-    //           filename: filename,
-    //           bucketName: 'uploads' + req.user.username
-    //         };
-    //         resolve(fileInfo);
-    //       });
-    //     });
-    //   }
-    // }
-    // upload = multer({ storage });
-
     res.render('index')
-
   })
 
   router.get('/game', ensureAuthenticated, (req, res) => {
@@ -75,19 +49,19 @@ module.exports = function (router, upload, gfs, storage) {
   // @route GET /files
   // @desc Display all files in JSON
   // backend api to see files in database
-  // router.get('/files', (req, res) => {
-  //   gfs.files.find().toArray((err, files) => {
-  //     // Check if files
-  //     if (!files || files.length === 0) {
-  //       return res.status(404).json({
-  //         err: 'No files exist'
-  //       });
-  //     }
+  router.get('/files',ensureAuthenticated, (req, res) => {
+    gfs.files.find().toArray((err, files) => {
+      // Check if files
+      if (!files || files.length === 0) {
+        return res.status(404).json({
+          err: 'No files exist'
+        });
+      }
 
-  //     // Files exist
-  //     return res.json(files);
-  //   });
-  // })
+      // Files exist
+      return res.json(files);
+    });
+  })
 
 
   // @route GET /file:filename

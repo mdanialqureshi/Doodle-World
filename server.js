@@ -115,26 +115,9 @@ function launchServer() {
     const server = app.listen(port, () => {
         console.log(`Server is lisenting on port ${port}`);
     })
-    user.startUserRoute(router,gfs)
+    user.startUserRoute(router,gfs,mongoose)
 }
 
-app.post('/clear-board', (req, res) => {
-
-    //cant clear board unless password is right
-    if (req.body.password === process.env.CLR_PASS) {
-
-        mongoose.connection.db.dropCollection('uploads.files', (err, result) => {
-            if (err) throw err;
-        });
-        mongoose.connection.db.dropCollection('uploads.chunks', (err, result) => {
-            if (err) throw err;
-        });
-        res.send("Database cleared!")
-    } else {
-        res.send("Wrong Password.")
-    }
-
-})
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.use(function (req, res, next) {

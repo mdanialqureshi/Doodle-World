@@ -91,8 +91,8 @@ function setUpBtns() {
 
 function set_clear_all () {
     clear_all_btn.addEventListener('click', () => {
-        var pass = prompt("Please enter the admin password to clear the board.")
-        axios.post('/clear-board', { password: pass })
+        var pass = prompt("Please enter your account password to clear the board.")
+        axios.post('/users/clear-board', { password: pass })
             .then(response => {
                 if (response.data === "Database cleared!") {
                     window.location.reload()

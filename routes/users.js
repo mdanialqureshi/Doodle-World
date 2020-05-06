@@ -12,8 +12,9 @@ const Grid = require('gridfs-stream')
 require('dotenv').config();
 var sketch = require('./sketch')
 const crypto = require('crypto');
+var bcrypt = require('bcryptjs');
 
-module.exports.startUserRoute = function (routerSketch, gfs) {
+module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
 
     router.get('/', urlencodedParser, function (req, res, next) {
         res.render('login', {
@@ -165,6 +166,26 @@ module.exports.startUserRoute = function (routerSketch, gfs) {
             }
         });
     });
+
+    router.post('/clear-board', (req, res) => {
+
+        User.comparePassword(req.body.password, req.user.password, function (err, isMatch) {
+            if (err) return done(err);
+            if (isMatch) {
+                mongoose.connection.db.dropCollection(req.user.username+'-images.files', (err, result) => {
+                    if (err) {
+    
+                    }
+                });
+                mongoose.connection.db.dropCollection(req.user.username+'-images.chunks', (err, result) => {
+                    if (err) { }
+                });
+                res.send("Database cleared!")
+            } else {
+                res.send("Wrong Password.")
+            }
+        });     
+    })
 
 }
 
