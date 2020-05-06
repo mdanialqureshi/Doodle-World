@@ -91,47 +91,31 @@ connection.once('open', () => {
     //init stream for photo upload
     gfs = Grid(connection.db, mongoose.mongo);
 
-    gfs.collection('uploads');
     launchServer(); //launch server only after the database is setup
 })
 
-// Create storage engine
-const storage = new GridFsStorage({
-    url: process.env.DOODLEDB,
-    options: { useUnifiedTopology: true },
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename = file.originalname;
-                //bucket name must match the collection name
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'uploads'
-                };
-                resolve(fileInfo);
-            });
-        });
-    }
-});
-const upload = multer({ storage });
-
 const router = express.Router();
 
+//login page 
+router.get('/', (req, res) => {
+    res.render('login', {
+        login_msg_obj: {
+            errors: [],
+            msg: ""
+        }
+    })
+})
+
 var user = require('./routes/users')
-app.use('/users', user)
+app.use('/users', user.router)
 
 app.use('/', router);
-
-var sketch = require('./routes/sketch')
 
 function launchServer() {
     const server = app.listen(port, () => {
         console.log(`Server is lisenting on port ${port}`);
     })
-    sketch(app, router, upload, gfs) //initalize the sketch routes and queries only once the db and server are launched
+    user.startUserRoute(router,gfs)
 }
 
 app.post('/clear-board', (req, res) => {
@@ -150,6 +134,11 @@ app.post('/clear-board', (req, res) => {
         res.send("Wrong Password.")
     }
 
+})
+
+//The 404 Route (ALWAYS Keep this as the last route)
+app.use(function (req, res, next) {
+    res.status(404).render('404.ejs')
 })
 
 //for cntrl c

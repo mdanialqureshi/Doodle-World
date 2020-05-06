@@ -1,4 +1,9 @@
-module.exports = function (app, router, upload, gfs) {
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage')
+const Grid = require('gridfs-stream')
+require('dotenv').config();
+
+module.exports = function (router, upload, gfs, storage) {
   // let Sketch = require('./models/sketch.model')
   // var upload = multer({ storage: storage });
   // router.post('/ingame/:tile', (req, res) => {
@@ -11,39 +16,56 @@ module.exports = function (app, router, upload, gfs) {
   //         .catch((err) => res.status(400).json("Error: " + err))
   // })
 
-
-  //login page 
-  router.get('/', (req, res) => {
-    res.render('login', {login_msg_obj: {
-      errors : [],
-      msg : ""
-    }})
-  })
-
-  function ensureAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
+  function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
       return next();
     }
     res.redirect('/users/login');
   }
 
   //to test if backend api is working
-  router.route('/ok').get(ensureAuthenticated,(req, res) => {
+  router.route('/ok').get(ensureAuthenticated, (req, res) => {
     res.send(Date().toString().substring(0, 16));
   })
 
-  router.get('/home',ensureAuthenticated,(req, res) => {
-      res.render('index')
+  router.get('/home', ensureAuthenticated, (req, res) => {
+
+
+    // gfs.collection('uploads' + req.user.username);
+    // storage = {
+    //   url: process.env.DOODLEDB,
+    //   options: { useUnifiedTopology: true },
+    //   file: (req, file) => {
+    //     return new Promise((resolve, reject) => {
+    //       crypto.randomBytes(16, (err, buf) => {
+    //         if (err) {
+    //           return reject(err);
+    //         }
+    //         const filename = file.originalname;
+    //         //bucket name must match the collection name
+    //         const fileInfo = {
+    //           filename: filename,
+    //           bucketName: 'uploads' + req.user.username
+    //         };
+    //         resolve(fileInfo);
+    //       });
+    //     });
+    //   }
+    // }
+    // upload = multer({ storage });
+
+    res.render('index')
+
   })
 
-  router.get('/game',ensureAuthenticated,(req, res) => {
+  router.get('/game', ensureAuthenticated, (req, res) => {
     res.render('game')
-})
+  })
 
 
   // @route POST /upload
   // @desc  Uploads file to DB
-  router.post('/done-drawing/:tile', ensureAuthenticated,upload.single('userDrawing'), (req, res) => {
+  router.post('/done-drawing/:tile', ensureAuthenticated, upload.single('userDrawing'), (req, res) => {
 
     // console.log(req.file)
     // console.log(req.params.tile)
@@ -71,7 +93,7 @@ module.exports = function (app, router, upload, gfs) {
   // @route GET /file:filename
   // @desc Display a file by its file name
   // backend api to see a file with a file name in database
-  router.get('/files/:filename', ensureAuthenticated,(req, res) => {
+  router.get('/files/:filename', ensureAuthenticated, (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
       // Check if file exsits
       if (!file || file.length === 0) {
@@ -87,7 +109,7 @@ module.exports = function (app, router, upload, gfs) {
   // @route GET /image:filename
   // @desc Display an image from the database
   // backend api call to display an image
-  router.get('/images/:filename',ensureAuthenticated, (req, res) => {
+  router.get('/images/:filename', ensureAuthenticated, (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
       // Check if file exsits
       if (!file || file.length === 0) {
@@ -109,7 +131,7 @@ module.exports = function (app, router, upload, gfs) {
   })
 
   //checks if there is a drawing in the tile
-  router.get('/images/exist/:filename',ensureAuthenticated, (req, res) => {
+  router.get('/images/exist/:filename', ensureAuthenticated, (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
       // Check if file exsits
       if (!file || file.length === 0) {
@@ -122,17 +144,12 @@ module.exports = function (app, router, upload, gfs) {
     })
   })
 
-  router.get('/images/view/:filename',ensureAuthenticated, (req, res) => {
+  router.get('/images/view/:filename', ensureAuthenticated, (req, res) => {
     let imgUrl = `/images/${req.params.filename}`
     res.render('drawings.ejs', {
       url: imgUrl,
       tileNum: parseInt(req.params.filename.toString().charAt(5)) + 1
     })
-  })
-
-  //The 404 Route (ALWAYS Keep this as the last route)
-  app.use(function (req, res, next) {
-    res.status(404).render('404.ejs')
   })
 
 }
