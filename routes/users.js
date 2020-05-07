@@ -145,7 +145,7 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
                     login_msg_obj.msg = "Username/Email is already in use!"
                     res.render('login', { login_msg_obj: login_msg_obj })
                 } else {
-                    login_msg_obj.msg = "Account registered sucessfully!"
+                    login_msg_obj.msg = "Account registered sucessfully! Please login."
                     res.render('login', { login_msg_obj: login_msg_obj })
                 }
                 // console.log(user);
