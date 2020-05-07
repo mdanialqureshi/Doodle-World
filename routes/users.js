@@ -16,6 +16,13 @@ var bcrypt = require('bcryptjs');
 
 module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
 
+    function ensureAuthenticated(req, res, next) {
+        if (req.isAuthenticated()) {
+            return next();
+        }
+        res.redirect('/users/login');
+    }
+
     router.get('/', urlencodedParser, function (req, res, next) {
         res.render('login', {
             login_msg_obj: {
@@ -46,10 +53,36 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
     router.post('/login', urlencodedParser,
         passport.authenticate('local', { failureRedirect: '/users/login', failureFlash: 'Invalid username or password' }),
         function (req, res) {
+            //for user board stoare in db
+            gfs.collection(req.user.username + "-board")
+            // Create storage engine
+            var storageboard = new GridFsStorage({
+                url: process.env.DOODLEDB,
+                options: { useUnifiedTopology: true },
+                file: (req, file) => {
+                    return new Promise((resolve, reject) => {
+                        crypto.randomBytes(16, (err, buf) => {
+                            if (err) {
+                                return reject(err);
+                            }
+                            const filename = file.originalname;
+                            //bucket name must match the collection name
+                            const fileInfo = {
+                                filename: filename,
+                                bucketName: req.user.username + "-board"
+                            };
+                            resolve(fileInfo);
+                        });
+                    });
+                }
+            });
+            var uploadboard = multer({ storageboard });
 
+
+            //for images storage in db
             gfs.collection(req.user.username + '-images');
             // Create storage engine
-            var storage = new GridFsStorage({
+            var storageimages = new GridFsStorage({
                 url: process.env.DOODLEDB,
                 options: { useUnifiedTopology: true },
                 file: (req, file) => {
@@ -70,10 +103,10 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
                 }
             });
 
-            var upload = multer({ storage });
+            var uploadimages = multer({ storageimages });
 
             //cann sketch routes after so that we can name the db dynamically with username
-            sketch(routerSketch, upload, gfs, storage) //initalize the sketch routes and queries only once the db and server are launched
+            sketch(routerSketch, uploadimages, gfs, uploadboard) //initalize the sketch routes and queries only once the db and server are launched
             res.redirect('/home');
         });
 
@@ -151,6 +184,7 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
                 // console.log(user);
             });
 
+            // console.log("made it here")
             // res.location('/');
             // res.redirect('/');
         }
@@ -167,24 +201,39 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
         });
     });
 
+    router.post('/friends', ensureAuthenticated, (req, res) => {
+        User.findOne({ username: req.body.friendFinder }, (err, result) => {
+            // Check if file exsits
+            console.log(result)
+            if (!result || result.length === 0) {
+                // return res.status(404).json({
+                //     err: `No user with name ${req.body.friendFinder} exists.`
+                // });
+                res.send(`No user with name ${req.body.friendFinder} exists.`)
+            } else {
+                res.send(`Your friend with the username: ${result.username} exists!`)
+            }
+        })
+    })
+
     router.post('/clear-board', (req, res) => {
 
         User.comparePassword(req.body.password, req.user.password, function (err, isMatch) {
             if (err) return done(err);
             if (isMatch) {
-                mongoose.connection.db.dropCollection(req.user.username+'-images.files', (err, result) => {
+                mongoose.connection.db.dropCollection(req.user.username + '-images.files', (err, result) => {
                     if (err) {
-    
+
                     }
                 });
-                mongoose.connection.db.dropCollection(req.user.username+'-images.chunks', (err, result) => {
+                mongoose.connection.db.dropCollection(req.user.username + '-images.chunks', (err, result) => {
                     if (err) { }
                 });
                 res.send("Database cleared!")
             } else {
                 res.send("Wrong Password.")
             }
-        });     
+        });
     })
 
 }

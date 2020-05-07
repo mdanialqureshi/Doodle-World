@@ -21,7 +21,8 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 //so we have have environment variables in .env file
 require('dotenv').config();
-
+//for accessing body of requests without explicity putting urlencodedParser as a parameter in function
+app.use(urlencodedParser)
 const port = process.env.PORT || 4000;
 //middleware, send json data
 app.use(cors());

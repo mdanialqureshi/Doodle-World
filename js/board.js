@@ -5,7 +5,6 @@ const cols = tiles / 4;
 const clear_all_btn = document.querySelector('#clear-all');
 const log_out_btn = document.querySelector('#logout')
 
-
 function isMobile() {
     if (!mobileAlertOnce && typeof window.orientation !== 'undefined') {
         alert("Doodle world is not yet fully optimized for mobile (but it does work). For a optimal doodle experience check us out on a desktop!")
@@ -18,6 +17,7 @@ function isMobile() {
     setUpTiles();
     setUpTileSketches();
     setUpBtns();
+    sendFile();
     // isMobile();
 }());
 
@@ -78,18 +78,19 @@ function setUpTileSketches() {
             })
             .catch(err => "Error:" + err)
     }
+
 }
 
 
 function setUpBtns() {
 
-    
+
     set_clear_all();
     set_logout();
 
 }
 
-function set_clear_all () {
+function set_clear_all() {
     clear_all_btn.addEventListener('click', () => {
         var pass = prompt("Please enter your account password to clear the board.")
         axios.post('/users/clear-board', { password: pass })
@@ -114,4 +115,14 @@ function set_logout() {
         redirect.click();
     })
 
+}
+
+
+
+function sendFile() {
+    console.log(escape(document));
+
+    // axios.post('/send-board', document)
+    //     .then((res) => { })
+    //     .catch((err) => console.log('err' + err))
 }

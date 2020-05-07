@@ -2,8 +2,10 @@ const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage')
 const Grid = require('gridfs-stream')
 require('dotenv').config();
+var fs = require('fs');
 
-module.exports = function (router, upload, gfs, storage) {
+
+module.exports = function (router, uploadimages, gfs,uploadboard) {
   // let Sketch = require('./models/sketch.model')
   // var upload = multer({ storage: storage });
   // router.post('/ingame/:tile', (req, res) => {
@@ -38,8 +40,17 @@ module.exports = function (router, upload, gfs, storage) {
 
 
   // @route POST /upload
-  // @desc  Uploads file to DB
-  router.post('/done-drawing/:tile', ensureAuthenticated, upload.single('userDrawing'), (req, res) => {
+  // @desc  Uploads image file to DB
+  router.post('/done-drawing/:tile', ensureAuthenticated, uploadimages.single('userDrawing'), (req, res) => {
+
+    // console.log(req.file)
+    // console.log(req.params.tile)
+    res.send(req.file)
+  })
+
+  // @route POST /upload
+  // @desc  Uploads ejs board file to DB
+  router.post('/send-board', ensureAuthenticated, uploadboard.single('index'), (req, res) => {
 
     // console.log(req.file)
     // console.log(req.params.tile)
