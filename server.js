@@ -35,11 +35,14 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 
 //static files 
-app.use('/css', express.static('css'))
-app.use('/js', express.static('js'))
-//this will load a index.html file by deafult
-// app.use('/', express.static('html', { index: 'login.html' }))
-app.use('/images', express.static('images'))
+// app.use('/css', express.static(path.join(__dirname, 'css')))
+// app.use('/js', express.static(path.join(__dirname, 'js')))
+// //this will load a index.html file by deafult
+// // app.use('/', express.static('html', { index: 'login.html' }))
+// app.use('/images', express.static(path.join(__dirname, 'images')))
+
+//handle all static files and directories within the public directory for all paths and urls
+app.use(express.static(path.join(__dirname, 'public')))
 //use a query string for delete request
 app.use(methodOverride('_method'))
 
@@ -116,14 +119,17 @@ function launchServer() {
     const server = app.listen(port, () => {
         console.log(`Server is lisenting on port ${port}`);
     })
-    user.startUserRoute(router,gfs,mongoose)
+    user.startUserRoute(router, gfs, mongoose)
 }
 
-
-//The 404 Route (ALWAYS Keep this as the last route)
-app.use(function (req, res, next) {
-    res.status(404).render('404.ejs')
-})
+// //The 404 Route (ALWAYS Keep this as the last route)
+// app.get('*', function (req, res) {
+//     res.render('404')
+// });
+// //The 404 Route (ALWAYS Keep this as the last route)
+app.use(function (req, res) {
+    res.status(404).render('404');
+});
 
 //for cntrl c
 process.on('SIGINT', function () {

@@ -54,35 +54,35 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
         passport.authenticate('local', { failureRedirect: '/users/login', failureFlash: 'Invalid username or password' }),
         function (req, res) {
             //for user board stoare in db
-            gfs.collection(req.user.username + "-board")
-            // Create storage engine
-            var storageboard = new GridFsStorage({
-                url: process.env.DOODLEDB,
-                options: { useUnifiedTopology: true },
-                file: (req, file) => {
-                    return new Promise((resolve, reject) => {
-                        crypto.randomBytes(16, (err, buf) => {
-                            if (err) {
-                                return reject(err);
-                            }
-                            const filename = file.originalname;
-                            //bucket name must match the collection name
-                            const fileInfo = {
-                                filename: filename,
-                                bucketName: req.user.username + "-board"
-                            };
-                            resolve(fileInfo);
-                        });
-                    });
-                }
-            });
-            var uploadboard = multer({ storageboard });
+            // gfs.collection(req.user.username + "-board")
+            // // Create storage engine
+            // var storageboard = new GridFsStorage({
+            //     url: process.env.DOODLEDB,
+            //     options: { useUnifiedTopology: true },
+            //     file: (req, file) => {
+            //         return new Promise((resolve, reject) => {
+            //             crypto.randomBytes(16, (err, buf) => {
+            //                 if (err) {
+            //                     return reject(err);
+            //                 }
+            //                 const filename = file.originalname;
+            //                 //bucket name must match the collection name
+            //                 const fileInfo = {
+            //                     filename: filename,
+            //                     bucketName: req.user.username + "-board"
+            //                 };
+            //                 resolve(fileInfo);
+            //             });
+            //         });
+            //     }
+            // });
+            // var uploadboard = multer({ storageboard });
 
 
             //for images storage in db
             gfs.collection(req.user.username + '-images');
             // Create storage engine
-            var storageimages = new GridFsStorage({
+            var storage = new GridFsStorage({
                 url: process.env.DOODLEDB,
                 options: { useUnifiedTopology: true },
                 file: (req, file) => {
@@ -103,11 +103,11 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
                 }
             });
 
-            var uploadimages = multer({ storageimages });
+            var upload1 = multer({ storage });
 
             //cann sketch routes after so that we can name the db dynamically with username
-            sketch(routerSketch, uploadimages, gfs, uploadboard) //initalize the sketch routes and queries only once the db and server are launched
-            res.redirect('/home');
+            sketch(routerSketch, upload1, gfs, storage) //initalize the sketch routes and queries only once the db and server are launched
+            res.redirect('/home/' + req.user.id);
         });
 
     passport.serializeUser(function (user, done) {
@@ -215,6 +215,21 @@ module.exports.startUserRoute = function (routerSketch, gfs, mongoose) {
             }
         })
     })
+
+    router.get('/:username', (req, res) => {
+
+        User.findOne({ username: req.params.username }, (err, foundUser) => {
+            if (err) {
+                res.send({ msg: `User with username: ${req.params.username} Not Found!` })
+            }
+            if (!foundUser || foundUser.length === 0) {
+                res.send({ msg: `User with username: ${req.params.username} Not Found!` })
+            } else {
+                res.send({ msg: `User with username: ${req.params.username} Found!` })
+            }
+        })
+    })
+
 
     router.post('/clear-board', (req, res) => {
 

@@ -131,10 +131,15 @@ function exit() {
     // redirect.setAttribute('href', 'index.html');
     // redirect.click();
     let redirectUrl = window.location.href.toString();
-    redirectUrl = redirectUrl.replace('game', 'home')
-    let redirect = document.createElement('a');
-    redirect.setAttribute('href', redirectUrl);
-    redirect.click();
+    redirectUrl = redirectUrl.split("game")[0] + "home/"
+    axios.get('/api/userid')
+        .then(res => {
+            redirectUrl = redirectUrl + res.data.id;
+            let redirect = document.createElement('a');
+            redirect.setAttribute('href', redirectUrl);
+            redirect.click();
+        })
+        .catch(err => "Error" + err)
 }
 
 function clear() {
@@ -153,29 +158,33 @@ function save() {
     if (confirm('Are you sure you want to save your drawing? You only get to save once, and you will no longer be able to edit your masterpiece.')) {
         // Save it!
         let currentTile = sessionStorage.getItem('tilenum')
-        axios({
-            method: 'get',
-            url: `/images/exist/tile-${currentTile}.png`,
-        })
-            .then(response => {
-                // if there is not an entry in the db for this tile then it can be saved to the db.
-                if (!response.data.exist) {
-                    canvas.toBlob(function (blob) {
-                        const formData = new FormData();
-                        formData.append('userDrawing', blob, `tile-${currentTile}.png`);
-                        // Post via axios or other transport method
-                        axios.post('/done-drawing/' + currentTile, formData)
-                            .then((res) => { })
-                            .catch((err) => console.log('err' + err))
-                    });
-                    //user has saved so clear the canvas for safe measure and exit to the homepage
-                    // clear();
-                }
-                // exit regardless of if there is alrdy an entry in the db or not
-                // wait a bit before exiting so pic has tome to get to db and render on index.html page
-                setTimeout(() => {
-                    exit()
-                }, 650)
+        axios.get('/api/userid')
+            .then(res1 => {
+                axios({
+                    method: 'get',
+                    url: `/${res1.data.id}/images/exist/tile-${currentTile}.png`,
+                })
+                    .then(response => {
+                        // if there is not an entry in the db for this tile then it can be saved to the db.
+                        if (!response.data.exist) {
+                            canvas.toBlob(function (blob) {
+                                const formData = new FormData();
+                                formData.append('userDrawing', blob, `tile-${currentTile}.png`);
+                                // Post via axios or other transport method
+                                axios.post('/done-drawing/' + currentTile, formData)
+                                    .then((res) => { })
+                                    .catch((err) => console.log('err' + err))
+                            });
+                            //user has saved so clear the canvas for safe measure and exit to the homepage
+                            // clear();
+                        }
+                        // exit regardless of if there is alrdy an entry in the db or not
+                        // wait a bit before exiting so pic has tome to get to db and render on index.html page
+                        setTimeout(() => {
+                            exit()
+                        }, 650)
+                    })
+                    .catch(err => "Error" + err)
             })
             .catch(err => "Error" + err)
     } else {
@@ -272,7 +281,7 @@ $slider.on("input", setBar);
 
 function logout_game() {
     let redirectUrl = window.location.href.toString();
-    redirectUrl = redirectUrl.replace('game', 'users/logout')
+    redirectUrl = redirectUrl.split('game')[0] + 'users/logout'
     let redirect = document.createElement('a');
     redirect.setAttribute('href', redirectUrl);
     redirect.click();
