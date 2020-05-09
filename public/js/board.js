@@ -51,25 +51,34 @@ async function setUpTileSketches() {
     // must get this reponse before we continue as other code is dependent on it so this blocks it before continuing
     try {
         let response1 = await axios.get('/api/userid')
-        let response2 = await axios.get(`/${response1.data.id}/files`)
-        for (const file of response2.data) {
-            if (file.exist) {
-                let img = document.createElement('img')
-                img.src = `/${response1.data.id}/images/tile-${file.filenum}.png`
-                let tile = document.querySelector(`#tile-${file.filenum}`);
-                tile.classList.add('after-img-div')
-                tile.appendChild(img);
-                document.querySelector(`#ref-tile-${file.filenum}`).setAttribute('href', `/${response1.data.id}/images/view/tile-${file.filenum}.png`)
-            } else {
-                document.querySelector(`#ref-tile-${file.filenum}`).setAttribute('href', `/game/${response1.data.id}`)
-            }
+        // let response2 = await axios.get(`/${response1.data.id}/files`)
+        for (let i = 0; i < tiles; i++) {
+            axios.get(`/${response1.data.id}/images/exist/tile-${i}.png`)
+                .then(response => {
+                    if (response.data.exist) {
+                        let img = document.createElement('img')
+                        axios.get(`/${response1.data.id}/images/tile-${i}.png`)
+                            .then(response => {
+                                img.src = `images/tile-${i}.png`
+                            })
+                            .catch(err => 'Error has occured:' + err)
+                        let tile = document.querySelector(`#tile-${i}`);
+                        tile.classList.add('after-img-div')
+                        tile.appendChild(img);
+                        //remove the ref to the game
+                        // this makes sure that the board cannot be edited when there is already a drawing in place
+                        document.querySelector(`#ref-tile-${i}`).setAttribute('href', `/${response1.data.id}/images/view/tile-${i}.png`)
+                    } else {
+                        document.querySelector(`#ref-tile-${i}`).setAttribute('href', `/game/${response1.data.id}`)
+                    }
+                })
+                .catch(err => "Error:" + err)
         }
-    } catch(err) {
+    } catch (err) {
         window.location.href = window.location.href.toString() + '/404'
         console.log("An error has occured: " + err)
     }
 }
-
 
 function setUpBtns() {
 
